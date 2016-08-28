@@ -18,8 +18,8 @@ You can check some cool demo in the 'demo' folder. Also, you can
 read aKFrameWork.pdf in 'doc' folder to know more about SUBS and 
 FUNCTION of this framework and how to use it. 
 
-Compile & run FrameworkManager.bas which will help you to create dialog with
-WYISWYG editor.
+FrameworkManager is a Web Application which will help you to get
+.bas code of the dialog.
 
 Have any question about this libary then contact me at http://www.qb64.net/forum
 Have any suggestion/bugs for this libary then inform me at
