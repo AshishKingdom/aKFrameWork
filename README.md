@@ -6,22 +6,22 @@ your pc done from my libary. I'm not saying that my libary will harm
 your computer but USE IT PROPERLY.</i> ;) :)
 
 To use this libary, see it below
-<code>
+<pre>
 '$include:'aKFrameWork_global.bi'
 [your code]
 [your code]
 [your code]
 '$include:'aKFrameWork_method.bi'
-</code>
+</pre>
 Yes, include aKFrameWork_global.bi on the top of your program and 
 aKFrameWork_method.bi on the bottom of your program.
 
-<b>You can check some cool demo in the 'demo' folder. Also, you can 
+<u>You can check some cool demo in the 'demo' folder. Also, you can 
 read aKFrameWork.pdf in 'doc' folder to know more about SUBS and 
 FUNCTION of this framework and how to use it. 
 
 The new added FrameworkManager is a Web Application which will help you to get
-.bas code of the dialog.</b>
+.bas code of the dialog.</u>
 
 Have any question about this libary then contact me at http://www.qb64.net/forum
 Have any suggestion/bugs for this libary then inform me at
