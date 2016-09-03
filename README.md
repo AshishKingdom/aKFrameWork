@@ -6,13 +6,13 @@ your pc done from my libary. I'm not saying that my libary will harm
 your computer but USE IT PROPERLY.</i> ;) :)
 
 To use this libary, see it below
-<pre>
+<code>
 '$include:'aKFrameWork_global.bi'
 [your code]
 [your code]
 [your code]
 '$include:'aKFrameWork_method.bi'
-</pre>
+</code>
 Yes, include aKFrameWork_global.bi on the top of your program and 
 aKFrameWork_method.bi on the bottom of your program.
 
