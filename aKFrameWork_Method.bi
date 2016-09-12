@@ -1,6 +1,6 @@
 
 '#######################
-' aKFrameWork v1.000
+' aKFrameWork v1.012
 '  A Qb64 Framework
 '      library
 '#######################
