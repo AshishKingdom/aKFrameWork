@@ -31,17 +31,19 @@ Coded by Ashish Kushwaha.
 			cursor: pointer;
 		}
 		.MyBtn:hover {
-			background: crimson;
+			background:linear-gradient(red, crimson);
 			box-shadow: 0px 0px 10px rgba(0,0,0,100);
 			color:#fff;
 		}
 		.MyBtn:focus {
-			opacity: 0.8;
+			color:#fff;
+			opacity: 0.4;
 			border-radius: 4px 4px;
 			border:1px solid rgb(0,0,255);
-			box-shadow: 0px 0px 15px rgba(0,0,255);
+			box-shadow: 0px 0px 15px rgba(0,0,0,255);
+			background: linear-gradient(red, crimson);
 		}
-		input {
+		input, select {
 			padding: 10px 15px;
 			border:4px solid rgb(200,200,200);
 			font-size: 20px;
@@ -57,6 +59,37 @@ Coded by Ashish Kushwaha.
 		}
 		td:hover {
 			background: rgb(230,235,255)
+		}
+		.IDE {
+			width:900px;
+			height:500px;
+			background: rgb(0,0,130);
+			overflow: auto;
+			padding: 10px 20px;
+			font-size: 12px;
+			position:relative;
+			left:180px;
+		}
+		.IDEColor1 {
+			color:#fff;
+		}
+		.IDEColor2 {
+			color:#ff0;
+		}
+		.IDEColor3{
+			color:rgb(85,255,255);
+		}
+		.IDEColor4 {
+			color:rgb(85,255,85);
+		}
+		#loader {
+			position: fixed;
+			height:3px;
+			top:-1px;
+			background: -moz-linear-gradient(right, crimson, red);
+			box-shadow: 1px 0px 2px crimson;
+			width:0%;
+			transition: 0.4s width ease-in-out;
 		}
 	</style>
 </head>
@@ -86,6 +119,16 @@ textbox.</span><br><br>
 <div id="fillArea" style="display:none;">
 	<!-- here is nothing -->
 </div>
+<div id="codeArea" style="display:none">
+	<div class="IDE">
+		<!--
+		This IDE has been styled by Me.(Ashish Kushwaha)
+		-->
+		<span class="IDEColor1">PRINT</span> <span class="IDEColor2">"Welcome to FrameworkManager!!"</span>
+	</div>
+</div>
+<div id="loader"></div>
+<br><br>
 <div class="alert-danger"></div>
 </div>
 <script type="text/javascript">
@@ -104,6 +147,7 @@ $(document).ready(function () {
 	}
 	function CreateNewForm() {
 		// body...
+		$("#loader").css("width", "98%")
 		n = $("#LabLen").val();
 		txt = '';
 		if (n>=1) {
@@ -111,54 +155,76 @@ $(document).ready(function () {
 			for(i=0;i<n;i++) {
 				txt = txt+"<tr><td><input type='text' placeholder='Label Text' size='100' id='labeltxt"+i+"'><br><br><input type='text' placeholder='Label variable name' size='100' id='labelvar'"+i+"><br><br><input type='number' placeholder='X' id='label"+i+"x'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='number' placeholder='Y' id='label"+i+"y'></td></tr>";
 			}
-		}
 		txt=txt+"</table><br><br>";
+		}
 		n = $("#LinkLabLen").val();
 		if (n>=1) {
 			txt = txt+"<h2 id='type1'>Link Labels</h2><hr id='hr1'><br><br><table class='table table-striped'>";
 			for (i=0;i<n;i++) {
 				txt = txt+"<tr><td><input type='text' placeholder='Link Label Text' size='100' id='linklabeltxt"+i+"'><br><br><input type='text' placeholder='Label variable name' size='100' id='linklabelvar'"+i+"><br><br><input type='number' placeholder='X' id='linklabel"+i+"x'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='number' placeholder='Y' id='linklabel"+i+"y'></td></tr>";
 			}
-		}
 		txt = txt+"</table><br><br>";
+		}
 		n = $("#BtnLen").val();
 		if (n>=1) {
 			txt =txt+"<h2 id='type1'>Buttons</h2><hr id='hr1'><br><br><table class='table table-striped'>"
 			for(i=0;i<n;i++) {
 				txt = txt+ "<tr><td><input type='text' placeholder='Button value' size='100' id='btnvalue"+i+"'><br><br><input type='text' placeholder='Button variable name' size='100' id='btnvar"+i+"'><br><br><input type='number' placeholder='X' id='btn"+i+"x'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='number' placeholder='Y' id='btn"+i+"y'></td></tr>";
 			}
-		}
 		txt = txt+"</table><br><br>";
+		}
 		n = $("#CheckLen").val();
 		if (n>=1) {
 			txt = txt+"<h2 id='type1'>Check Boxes</h2><hr id='hr1'><br><br><table class='table table-striped'>"
 			for(i=0;i<n;i++) {
 				txt = txt+"<tr><td><input type='text' placeholder='Checkbox text' size='100' id='checkvalue"+i+"'><br><br><input type='text' placeholder='Checkbox variable name' size='100' id='checkvar"+i+"'><br><br><input type='number' placeholder='X' id='checkbox"+i+"x'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='number' placeholder='Y' id='checkbox"+i+"y'></td></tr>"
 			}
-		}
 		txt = txt+"</table><br><br>";
+		}
 		n = $("#RadLen").val();
 		if (n>=1) {
 			txt = txt+"<h2 id='type1'>Radio Buttons</h2><hr id='hr1'><br><br><table class='table table-striped'>"
 			for (i=0;i<n;i++) {
 				txt = txt+"<tr><td><input type='text' placeholder='Radio button text' size='100' id='radtxt"+i+"'><br><br><input type='text' placeholder='Radio button variable name' size='100' id='radvar"+i+"'><br><br><input type='number' placeholder='Group ID' id='radid"+i+"'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='number' placeholder='X' id='rad"+i+"x'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='number' placeholder='Y' id='rad'"+i+"y'></td></tr>"
 			}
-		}
 		txt = txt+"</table><br><br>";
+		}
 		n = $("#ProLen").val();
 		if (n>=1) {
 			txt = txt+"<h2 id='type1'>Progress Bars</h2><hr id='hr1'><br><br><table class='table table-striped'>"
 			for(i=0;i<n;i++) {
 				txt = txt+"<tr><td><label style='font-size:0.4cm'>Active &nbsp;<input type='checkbox' id='proactive"+i+"'></label><br><br><input type='number' placeholder='Width' id='prowidth"+i+"'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='number' placeholder='Value' max='100' id='provalue"+i+"'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='number' placeholder='X' id='pro"+i+"x'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='number' placeholder='Y' id='pro"+1+"y'></td></tr>"
 			}
-		}
 		txt = txt+"</table><br><br>";
-		$("#form2").fadeOut(400);
-		$("#fillArea").html(txt).fadeIn(400);
+		}
+		n = $("#PicLen").val();
+		if (n>=1) {
+			txt = txt+"<h2 id='type1'>Pictures</h2><hr id='hr1'><br><br><table class='table table-striped'>"
+			for(i=0;i<n;i++) {
+				txt = txt+"<tr><td><input type='text' placeholder='Picture variable name' size='100' id='picvar"+i+"'><br><br><input type='number' placeholder='Picture Width' id='picwidth"+i+"'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='number' placeholder='Picture Height' id='picheight"+i+"'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='number' placeholder='X' id='pic"+i+"x'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='number' placeholder='Y' id='pic"+i+"x'></td></tr>";
+			}
+		txt = txt+"</table><br><br>";
+		}
+		n = $("#TextLen").val();
+		if (n>=1) {
+			txt = txt+"<h2 id='type1'>Textboxes</h2><hr id='hr1'><br><br><table class='table table-striped'>"
+			for(i=0;i<n;i++) {
+				txt = txt+"<tr><td><input type='text' placeholder='Textbox variable name.' size='100' id='textvar"+i+"'><br><br><input type='text' placeholder='Textbox value'size='100' id='textval"+i+"'><br><br><input type='text' placeholder='TextBox placeholder text' size='100' id='textph"+i+"'><br><br><input type='number' placeholder='Width' id='textwidth"+i+"'>&nbsp;&nbsp;&nbsp;&nbsp;<select value='String' id='texttyp"+i+"'><option value='0'>String</option><option value='aKPassword'>Password</option></select>&nbsp;&nbsp;&nbsp;&nbsp;<input type='number' placeholder='X' id='text1"+i+"x'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='number' placeholder='Y' id='text"+i+"'y></td></tr>";
+			}
+		txt = txt+"</table><br><br>";
+		}
+		n = $("#NumLen").val();
+		txt = txt+"<button class='MyBtn' onclick='generateCode()'>Generate code & Output</button><br><br>"
+		$("#form2").fadeOut(800);
+		$("#fillArea").html(txt).fadeIn(800, function() {
+			$("#loader").css('display', 'none').css('width', '0%').css('display', 'block')
+		});
 		return;
  }
  function generateCode() {
  	// body...
+ 	$("#loader").css('display', 'block').css("width", "50%")
+
  }
 </script>
 </body>
