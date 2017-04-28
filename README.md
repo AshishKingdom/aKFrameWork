@@ -1,9 +1,6 @@
 # aKFrameWork v1.012
 ***
-<i>Thanks for download my library. You can use this in your project freely 
-but use it on your own risk as I'll be responsible for any damage to
-your pc done from my libary. I'm not saying that my libary will harm
-your computer but USE IT PROPERLY.</i> ;) :)
+A library for adding dialogs to your Qb64 Program. With love by Ashish!
 
 To use this libary, see it below
 <pre>
