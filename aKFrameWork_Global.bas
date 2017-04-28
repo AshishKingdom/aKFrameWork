@@ -190,7 +190,7 @@ REDIM SHARED aKTooltip(1) AS aKTooltipType, aKTooltipLength AS INTEGER
 REDIM SHARED aKDivider(1) AS aKDividerType, aKDividerLength AS INTEGER
 REDIM SHARED aKPicture(1) AS aKPictureType, aKPictureLength AS INTEGER
 REDIM SHARED aKPanel(1) AS aKPanelType, aKPanelLength AS INTEGER
-DIM SHARED Mouse AS mousetype, tooltipBg AS LONG, optionsBg AS LONG
+DIM SHARED aKMouse AS mousetype, tooltipBg AS LONG, optionsBg AS LONG
 
 aKDialogLength = 1
 aKlabelLength = 1
