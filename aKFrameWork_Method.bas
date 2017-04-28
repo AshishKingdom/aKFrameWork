@@ -401,7 +401,7 @@ END FUNCTION
 SUB aKCheck (id) STATIC
 IF NOT aKDialog(id).shown AND NOT aKDialog(id).closed THEN akDialogShow id: aKDialog(id).shown = -1
 DO
-    Mouse.movement = _MOUSEINPUT
+    aKMouse.movement = _MOUSEINPUT
 
     FOR i = 1 TO aKProgressBarLength
         IF aKProgressBar(i).active AND aKProgressBar(i).id = id THEN
@@ -421,10 +421,10 @@ DO
             EXIT DO
         END IF
     NEXT
-    IF Mouse.movement THEN
-        Mouse.x = _MOUSEX: Mouse.y = _MOUSEY
-        IF _MOUSEBUTTON(1) THEN Mouse.Lclick = -1 ELSE Mouse.Lclick = 0
-        IF _MOUSEBUTTON(2) THEN Mouse.Rclick = -1 ELSE Mouse.Rclick = 0
+    IF aKMouse.movement THEN
+        aKMouse.x = _MOUSEX: aKMouse.y = _MOUSEY
+        IF _MOUSEBUTTON(1) THEN aKMouse.Lclick = -1 ELSE aKMouse.Lclick = 0
+        IF _MOUSEBUTTON(2) THEN aKMouse.Rclick = -1 ELSE aKMouse.Rclick = 0
         EXIT DO
     END IF
 LOOP
@@ -435,11 +435,11 @@ SUB aKUpdate (id)
 IF NOT aKDialog(id).shown AND NOT aKDialog(id).closed THEN akDialogShow id: aKDialog(id).shown = -1
 'close of dialog
 IF NOT aKDialog(id).closed THEN
-    IF Mouse.x > aKDialog(id).Cx AND Mouse.x < aKDialog(id).Cx2 AND Mouse.y > aKDialog(id).Cy AND Mouse.y < aKDialog(id).Cy2 AND Mouse.Lclick THEN aKHideDialog id: EXIT SUB
+    IF aKMouse.x > aKDialog(id).Cx AND aKMouse.x < aKDialog(id).Cx2 AND aKMouse.y > aKDialog(id).Cy AND aKMouse.y < aKDialog(id).Cy2 AND aKMouse.Lclick THEN aKHideDialog id: EXIT SUB
     'draging feature (suggested by Fellippe )
-    IF Mouse.x > aKDialog(id).Wx AND Mouse.x < aKDialog(id).Cx - 30 AND Mouse.y > aKDialog(id).Wy - 25 AND Mouse.y < aKDialog(id).Wy THEN
-        IF NOT RTRIM$(Mouse.icon) = "move" THEN Mouse.icon = "move": glutSetCursor 5
-        IF Mouse.Lclick THEN
+    IF aKMouse.x > aKDialog(id).Wx AND aKMouse.x < aKDialog(id).Cx - 30 AND aKMouse.y > aKDialog(id).Wy - 25 AND aKMouse.y < aKDialog(id).Wy THEN
+        IF NOT RTRIM$(aKMouse.icon) = "move" THEN aKMouse.icon = "move": glutSetCursor 5
+        IF aKMouse.Lclick THEN
             tmp& = _NEWIMAGE(aKDialog(id).width + 1, aKDialog(id).height + 1, 32)
             tmp2& = _COPYIMAGE(0)
             _DEST tmp&
@@ -496,17 +496,17 @@ IF NOT aKDialog(id).closed THEN
             LOOP
         END IF
     ELSE
-        IF RTRIM$(Mouse.icon) = "move" THEN _MOUSESHOW "default": Mouse.icon = "default"
+        IF RTRIM$(aKMouse.icon) = "move" THEN _MOUSESHOW "default": aKMouse.icon = "default"
     END IF
     'checking tooltips of labels
     IF aKlabelLength > 0 THEN
         FOR i = 1 TO aKlabelLength
             IF aKHover(id, aKLabel, i) AND aKLabel(i).id = id AND NOT aKLabel(i).hidden THEN
                 IF aKLabel(i).tooltip AND aKTooltip(aKLabel(i).tId).id = id THEN
-                    IF Mouse.Lclick THEN aKTooltip(aKLabel(i).tId).shown = 0: _PUTIMAGE , tooltipBg: EXIT SUB
+                    IF aKMouse.Lclick THEN aKTooltip(aKLabel(i).tId).shown = 0: _PUTIMAGE , tooltipBg: EXIT SUB
                     IF NOT aKTooltip(aKLabel(i).tId).shown THEN tooltipBg = _COPYIMAGE(0)
                     _PUTIMAGE , tooltipBg
-                    _PUTIMAGE (Mouse.x + 10, Mouse.y - 3 - _HEIGHT(aKTooltip(aKLabel(i).tId).content)), aKTooltip(aKLabel(i).tId).content
+                    _PUTIMAGE (aKMouse.x + 10, aKMouse.y - 3 - _HEIGHT(aKTooltip(aKLabel(i).tId).content)), aKTooltip(aKLabel(i).tId).content
                     aKTooltip(aKLabel(i).tId).shown = -1
                 END IF
             ELSE
@@ -527,10 +527,10 @@ IF NOT aKDialog(id).closed THEN
             END IF
             'tooltips
             IF aKButton(i).tooltip THEN
-                IF Mouse.Lclick THEN aKTooltip(aKButton(i).tId).shown = 0: _PUTIMAGE , tooltipBg: EXIT SUB
+                IF aKMouse.Lclick THEN aKTooltip(aKButton(i).tId).shown = 0: _PUTIMAGE , tooltipBg: EXIT SUB
                 IF NOT aKTooltip(aKButton(i).tId).shown THEN tooltipBg = _COPYIMAGE(0)
                 _PUTIMAGE , tooltipBg
-                _PUTIMAGE (Mouse.x + 20, Mouse.y - 5), aKTooltip(aKButton(i).tId).content
+                _PUTIMAGE (aKMouse.x + 20, aKMouse.y - 5), aKTooltip(aKButton(i).tId).content
                 aKTooltip(aKButton(i).tId).shown = -1
             END IF
         ELSE
@@ -548,7 +548,7 @@ IF NOT aKDialog(id).closed THEN
 
     FOR i = 1 TO aKLinklabelLength
         IF aKHover(id, aKLinkLabel, i) AND aKLinkLabel(i).id = id AND NOT aKLinkLabel(i).hidden THEN
-            IF NOT RTRIM$(Mouse.icon) = "link" THEN Mouse.icon = "link": _MOUSESHOW "link"
+            IF NOT RTRIM$(aKMouse.icon) = "link" THEN aKMouse.icon = "link": _MOUSESHOW "link"
             IF aKClick(id, aKLinkLabel, i) THEN
                 COLOR _RGB(255, 0, 0), _RGB(230, 230, 230)
                 _PRINTSTRING (aKDialog(id).Wx + aKLinkLabel(i).x, aKDialog(id).Wy + aKLinkLabel(i).y), RTRIM$(aKLinkLabel(i).text)
@@ -560,14 +560,14 @@ IF NOT aKDialog(id).closed THEN
                 LINE (aKDialog(id).Wx + aKLinkLabel(i).x, aKDialog(id).Wy + aKLinkLabel(i).y + 14)-(aKDialog(id).Wx + aKLinkLabel(i).x + aKStrLength(aKLinkLabel(i).text) * 8, aKDialog(id).Wy + aKLinkLabel(i).y + 14), _RGB(0, 0, 255)
             END IF
             IF aKLinkLabel(i).tooltip THEN
-                IF Mouse.Lclick THEN aKTooltip(aKLinkLabel(i).tId).shown = 0: _PUTIMAGE , tooltipBg: EXIT SUB
+                IF aKMouse.Lclick THEN aKTooltip(aKLinkLabel(i).tId).shown = 0: _PUTIMAGE , tooltipBg: EXIT SUB
                 IF NOT aKTooltip(aKLinkLabel(i).tId).shown THEN tooltipBg = _COPYIMAGE(0)
                 _PUTIMAGE , tooltipBg
-                _PUTIMAGE (Mouse.x + 20, Mouse.y - 5), aKTooltip(aKLinkLabel(i).tId).content
+                _PUTIMAGE (aKMouse.x + 20, aKMouse.y - 5), aKTooltip(aKLinkLabel(i).tId).content
                 aKTooltip(aKLinkLabel(i).tId).shown = -1
             END IF
         ELSE
-            IF RTRIM$(Mouse.icon) = "link" AND NOT aKAnyHover(id, aKLinkLabel) THEN Mouse.icon = "default": _MOUSESHOW "default"
+            IF RTRIM$(aKMouse.icon) = "link" AND NOT aKAnyHover(id, aKLinkLabel) THEN aKMouse.icon = "default": _MOUSESHOW "default"
             IF aKTooltip(aKLinkLabel(i).tId).shown AND aKLinkLabel(i).id = id THEN aKTooltip(aKLinkLabel(i).tId).shown = 0: _PUTIMAGE , tooltipBg
         END IF
     NEXT
@@ -575,10 +575,10 @@ IF NOT aKDialog(id).closed THEN
     FOR i = 1 TO aKPictureLength
         IF aKHover(id, aKPicture, i) AND aKPicture(i).id = id AND NOT aKPicture(i).hidden THEN
             IF aKPicture(i).tooltip THEN
-                IF Mouse.Lclick THEN aKTooltip(aKPicture(i).tid).shown = 0: _PUTIMAGE , tooltipBg: EXIT SUB
+                IF aKMouse.Lclick THEN aKTooltip(aKPicture(i).tid).shown = 0: _PUTIMAGE , tooltipBg: EXIT SUB
                 IF NOT aKTooltip(aKPicture(i).tid).shown THEN tooltipBg = _COPYIMAGE(0)
                 _PUTIMAGE , tooltipBg
-                _PUTIMAGE (Mouse.x + 20, Mouse.y - 5), aKTooltip(aKPicture(i).tid).content
+                _PUTIMAGE (aKMouse.x + 20, aKMouse.y - 5), aKTooltip(aKPicture(i).tid).content
                 aKTooltip(aKPicture(i).tid).shown = -1
             END IF
         ELSE
@@ -588,7 +588,7 @@ IF NOT aKDialog(id).closed THEN
 
     FOR i = 1 TO aKCheckBoxLength
         IF aKHover(id, aKCheckBox, i) AND aKCheckBox(i).id = id AND NOT aKCheckBox(i).hidden THEN
-            IF Mouse.Lclick THEN
+            IF aKMouse.Lclick THEN
                 IF aKCheckBox(i).checked THEN aKCheckBox(i).checked = 0: LINE (aKCheckBox(i).x + aKDialog(id).Wx + 3, aKCheckBox(i).y + aKDialog(id).Wy + 3)-(aKCheckBox(i).x + aKDialog(id).Wx + 9, aKCheckBox(i).y + aKDialog(id).Wy + 9), _RGB(255, 255, 255), BF ELSE aKCheckBox(i).checked = -1: LINE (aKCheckBox(i).x + aKDialog(id).Wx + 3, aKCheckBox(i).y + aKDialog(id).Wy + 3)-(aKCheckBox(i).x + aKDialog(id).Wx + 9, aKCheckBox(i).y + aKDialog(id).Wy + 9), _RGB(0, 0, 0), BF
             END IF
             IF NOT aKCheckBox(i).react THEN LINE (aKDialog(id).Wx + aKCheckBox(i).x, aKDialog(id).Wy + aKCheckBox(i).y)-(aKDialog(id).Wx + aKCheckBox(i).x + 12, aKDialog(id).Wy + aKCheckBox(i).y + 12), _RGB(0, 0, 255), B: aKCheckBox(i).react = -1
@@ -600,7 +600,7 @@ IF NOT aKDialog(id).closed THEN
 
     FOR i = 1 TO aKRadioLength
         IF aKHover(id, aKRadioButton, i) AND aKRadioButton(i).id = id AND NOT aKRadioButton(i).hidden THEN
-            IF Mouse.Lclick AND NOT aKRadioButton(i).checked THEN
+            IF aKMouse.Lclick AND NOT aKRadioButton(i).checked THEN
                 FOR n = 1 TO aKRadioLength
                     IF aKRadioButton(i).groupId = aKRadioButton(n).groupId AND aKRadioButton(n).checked AND aKRadioButton(n).id = id THEN
                         IF NOT aKRadioButton(n).hidden THEN
@@ -630,8 +630,8 @@ IF NOT aKDialog(id).closed THEN
                 LINE (aKNumericUpDown(i).x + aKDialog(id).Wx + aKNumericUpDown(i).width + 10, aKNumericUpDown(i).y + aKDialog(id).Wy + 13)-(aKNumericUpDown(i).x + aKDialog(id).Wx + aKNumericUpDown(i).width + 30, aKNumericUpDown(i).y + aKDialog(id).Wy + 25), _RGB(0, 0, 255), B
                 aKNumericUpDown(i).react = -1
             END IF
-            IF Mouse.x > aKNumericUpDown(i).x + aKDialog(id).Wx + aKNumericUpDown(i).width + 10 AND Mouse.y > aKNumericUpDown(i).y + aKDialog(id).Wy AND Mouse.x < aKNumericUpDown(i).x + aKDialog(id).Wx + aKNumericUpDown(i).width + 30 AND Mouse.y < aKNumericUpDown(i).y + aKDialog(id).Wy + 13 THEN
-                IF Mouse.Lclick THEN
+            IF aKMouse.x > aKNumericUpDown(i).x + aKDialog(id).Wx + aKNumericUpDown(i).width + 10 AND aKMouse.y > aKNumericUpDown(i).y + aKDialog(id).Wy AND aKMouse.x < aKNumericUpDown(i).x + aKDialog(id).Wx + aKNumericUpDown(i).width + 30 AND aKMouse.y < aKNumericUpDown(i).y + aKDialog(id).Wy + 13 THEN
+                IF aKMouse.Lclick THEN
                     aKNumericUpDown(i).value = aKNumericUpDown(i).value + 1
                     COLOR _RGB(0, 0, 0), _RGBA(255, 255, 255, 255)
                     n = INT(aKNumericUpDown(i).width / 8)
@@ -652,8 +652,8 @@ IF NOT aKDialog(id).closed THEN
                     aKNumericUpDown(i).react1 = 0
                 END IF
             END IF
-            IF Mouse.x > aKNumericUpDown(i).x + aKDialog(id).Wx + aKNumericUpDown(i).width + 10 AND Mouse.y > aKNumericUpDown(i).y + aKDialog(id).Wy + 13 AND Mouse.x < aKNumericUpDown(i).x + aKDialog(id).Wx + aKNumericUpDown(i).width + 30 AND Mouse.y < aKNumericUpDown(i).y + aKDialog(id).Wy + 25 THEN
-                IF Mouse.Lclick THEN
+            IF aKMouse.x > aKNumericUpDown(i).x + aKDialog(id).Wx + aKNumericUpDown(i).width + 10 AND aKMouse.y > aKNumericUpDown(i).y + aKDialog(id).Wy + 13 AND aKMouse.x < aKNumericUpDown(i).x + aKDialog(id).Wx + aKNumericUpDown(i).width + 30 AND aKMouse.y < aKNumericUpDown(i).y + aKDialog(id).Wy + 25 THEN
+                IF aKMouse.Lclick THEN
                     aKNumericUpDown(i).value = aKNumericUpDown(i).value - 1
                     COLOR _RGB(0, 0, 0), _RGBA(255, 255, 255, 255)
                     n = INT(aKNumericUpDown(i).width / 8)
@@ -699,10 +699,10 @@ IF NOT aKDialog(id).closed THEN
     'by Ashish v1.002
     FOR i = 1 TO aKTextBoxLength
         IF aKHover(id, aKTextBox, i) AND aKTextBox(i).id = id AND NOT aKTextBox(i).hidden THEN
-            IF NOT RTRIM$(Mouse.icon) = "text" THEN Mouse.icon = "text": _MOUSESHOW "text"
-            IF Mouse.Lclick THEN
+            IF NOT RTRIM$(aKMouse.icon) = "text" THEN aKMouse.icon = "text": _MOUSESHOW "text"
+            IF aKMouse.Lclick THEN
                 aKTextBox(i).active = -1
-                Mouse.icon = "default": _MOUSESHOW "default"
+                aKMouse.icon = "default": _MOUSESHOW "default"
                 cursorX = 4: cursorY = aKDialog(id).Wy + aKTextBox(i).y + 3
                 limit = INT(aKTextBox(i).width - 20) / 8
                 IF aKStrLength(aKTextBox(i).value) > limit THEN
@@ -724,10 +724,10 @@ IF NOT aKDialog(id).closed THEN
                 s1 = limit: s2 = 0
                 DO
                     k$ = INKEY$
-                    Mouse.movement = _MOUSEINPUT
-                    IF Mouse.movement THEN
-                        Mouse.x = _MOUSEX: Mouse.y = _MOUSEY: Mouse.Lclick = _MOUSEBUTTON(1): Mouse.Rclick = _MOUSEBUTTON(2)
-                        IF NOT aKHover(id, aKTextBox, i) AND Mouse.Lclick THEN
+                    aKMouse.movement = _MOUSEINPUT
+                    IF aKMouse.movement THEN
+                        aKMouse.x = _MOUSEX: aKMouse.y = _MOUSEY: aKMouse.Lclick = _MOUSEBUTTON(1): aKMouse.Rclick = _MOUSEBUTTON(2)
+                        IF NOT aKHover(id, aKTextBox, i) AND aKMouse.Lclick THEN
                             aKTextBox(i).active = 0
                             aKDrawObject id, aKTextBox, i
                             IF NOT RTRIM$(aKTextBox(i).value) = "" THEN
@@ -824,7 +824,7 @@ IF NOT aKDialog(id).closed THEN
             END IF
             IF NOT aKTextBox(i).react THEN LINE (aKDialog(id).Wx + aKTextBox(i).x, aKDialog(id).Wy + aKTextBox(i).y)-(aKDialog(id).Wx + aKTextBox(i).x + aKTextBox(i).width, aKDialog(id).Wy + aKTextBox(i).y + 25), _RGB(0, 0, 255), B: aKTextBox(i).react = -1
         ELSE
-            IF RTRIM$(Mouse.icon) = "text" AND NOT aKAnyHover(id, aKTextBox) AND aKTextBox(i).id = id THEN Mouse.icon = "default": _MOUSESHOW "default"
+            IF RTRIM$(aKMouse.icon) = "text" AND NOT aKAnyHover(id, aKTextBox) AND aKTextBox(i).id = id THEN aKMouse.icon = "default": _MOUSESHOW "default"
             IF aKTextBox(i).react THEN LINE (aKDialog(id).Wx + aKTextBox(i).x, aKDialog(id).Wy + aKTextBox(i).y)-(aKDialog(id).Wx + aKTextBox(i).x + aKTextBox(i).width, aKDialog(id).Wy + aKTextBox(i).y + 25), _RGB(0, 0, 0), B: aKTextBox(i).react = 0
         END IF
     NEXT
@@ -873,10 +873,10 @@ IF NOT aKDialog(id).closed THEN
                     aKUpdate id
                     IF aKDialog(id).closed THEN EXIT DO
                     IF NOT aKComboBox(i).active THEN _PUTIMAGE , optionsBg: EXIT DO
-                    IF Mouse.x < aKComboBox(i).x + aKDialog(id).Wx AND Mouse.Lclick OR Mouse.x > aKComboBox(i).x + aKDialog(id).Wx + aKStrLength(aKComboBox(i).value) * 8 + 30 AND Mouse.Lclick AND Mouse.y < aKComboBox(i).y + aKDialog(id).Wy + 23 OR Mouse.y < aKComboBox(i).y + aKDialog(id).Wy AND Mouse.Lclick OR Mouse.y > aKComboBox(i).y + aKDialog(id).Wy + dy + 23 AND Mouse.Lclick OR Mouse.x > aKComboBox(i).x + aKDialog(id).Wx + dx + aKStrLength(aKComboBox(i).value) * 8 + 30 AND Mouse.y > aKComboBox(i).y + aKDialog(id).Wy + 23 AND Mouse.Lclick THEN _PUTIMAGE , optionsBg: aKComboBox(i).active = 0: EXIT DO
+                    IF aKMouse.x < aKComboBox(i).x + aKDialog(id).Wx AND aKMouse.Lclick OR aKMouse.x > aKComboBox(i).x + aKDialog(id).Wx + aKStrLength(aKComboBox(i).value) * 8 + 30 AND aKMouse.Lclick AND aKMouse.y < aKComboBox(i).y + aKDialog(id).Wy + 23 OR aKMouse.y < aKComboBox(i).y + aKDialog(id).Wy AND aKMouse.Lclick OR aKMouse.y > aKComboBox(i).y + aKDialog(id).Wy + dy + 23 AND aKMouse.Lclick OR aKMouse.x > aKComboBox(i).x + aKDialog(id).Wx + dx + aKStrLength(aKComboBox(i).value) * 8 + 30 AND aKMouse.y > aKComboBox(i).y + aKDialog(id).Wy + 23 AND aKMouse.Lclick THEN _PUTIMAGE , optionsBg: aKComboBox(i).active = 0: EXIT DO
                     FOR n = 1 TO l
-                        IF Mouse.x > aKComboBox(i).x + aKDialog(id).Wx AND Mouse.y > optionsY(n) AND Mouse.x < aKComboBox(i).x + aKDialog(id).Wx + dx + aKStrLength(aKComboBox(i).value) * 8 + 30 AND Mouse.y < optionsY(n) + 15 THEN
-                            IF Mouse.Lclick THEN
+                        IF aKMouse.x > aKComboBox(i).x + aKDialog(id).Wx AND aKMouse.y > optionsY(n) AND aKMouse.x < aKComboBox(i).x + aKDialog(id).Wx + dx + aKStrLength(aKComboBox(i).value) * 8 + 30 AND aKMouse.y < optionsY(n) + 15 THEN
+                            IF aKMouse.Lclick THEN
                                 _PUTIMAGE , optionsBg: aKComboBox(i).active = 0
                                 COLOR _RGB(0, 0, 0), _RGB(255, 255, 255)
                                 LINE (aKDialog(id).Wx + aKComboBox(i).x, aKDialog(id).Wy + aKComboBox(i).y)-(aKDialog(id).Wx + aKComboBox(i).x + 30 + aKStrLength(aKComboBox(i).value) * 8, aKDialog(id).Wy + aKComboBox(i).y + 23), _RGB(230, 230, 230), BF
@@ -938,23 +938,23 @@ FUNCTION aKClick (id, typ, object)
 
 SELECT CASE typ
     CASE aKLabel
-        IF aKHover(id, typ, object) AND Mouse.Lclick THEN aKClick = -1
+        IF aKHover(id, typ, object) AND aKMouse.Lclick THEN aKClick = -1
     CASE aKButton
-        IF aKHover(id, typ, object) AND Mouse.Lclick THEN aKClick = -1
+        IF aKHover(id, typ, object) AND aKMouse.Lclick THEN aKClick = -1
     CASE aKCheckBox
-        IF aKHover(id, typ, object) AND Mouse.Lclick THEN aKClick = -1
+        IF aKHover(id, typ, object) AND aKMouse.Lclick THEN aKClick = -1
     CASE aKRadioButton
-        IF aKHover(id, typ, object) AND Mouse.Lclick THEN aKClick = -1
+        IF aKHover(id, typ, object) AND aKMouse.Lclick THEN aKClick = -1
     CASE aKLinkLabel
-        IF aKHover(id, typ, object) AND Mouse.Lclick THEN aKClick = -1
+        IF aKHover(id, typ, object) AND aKMouse.Lclick THEN aKClick = -1
     CASE aKComboBox
-        IF aKHover(id, typ, object) AND Mouse.Lclick THEN aKClick = -1
+        IF aKHover(id, typ, object) AND aKMouse.Lclick THEN aKClick = -1
     CASE aKNumericUpDown
-        IF aKHover(id, typ, object) AND Mouse.Lclick THEN aKClick = -1
+        IF aKHover(id, typ, object) AND aKMouse.Lclick THEN aKClick = -1
     CASE aKTextBox
-        IF aKHover(id, typ, object) AND Mouse.Lclick THEN aKClick = -1
+        IF aKHover(id, typ, object) AND aKMouse.Lclick THEN aKClick = -1
     CASE aKPicture
-        IF aKHover(id, typ, object) AND Mouse.Lclick THEN aKClick = -1
+        IF aKHover(id, typ, object) AND aKMouse.Lclick THEN aKClick = -1
     CASE ELSE
         aKError "aKClick", 254
 END SELECT
@@ -964,23 +964,23 @@ FUNCTION aKHover (id, typ, object)
 
 SELECT CASE typ
     CASE aKLabel
-        IF Mouse.x > aKLabel(object).x + aKDialog(id).Wx AND Mouse.y > aKLabel(object).y + aKDialog(id).Wy AND Mouse.x < aKLabel(object).x + aKDialog(id).Wx + aKStrLength(aKLabel(object).text) * 8 AND Mouse.y < aKLabel(object).y + aKDialog(id).Wy + 15 THEN aKHover = -1
+        IF aKMouse.x > aKLabel(object).x + aKDialog(id).Wx AND aKMouse.y > aKLabel(object).y + aKDialog(id).Wy AND aKMouse.x < aKLabel(object).x + aKDialog(id).Wx + aKStrLength(aKLabel(object).text) * 8 AND aKMouse.y < aKLabel(object).y + aKDialog(id).Wy + 15 THEN aKHover = -1
     CASE aKButton
-        IF Mouse.x > aKButton(object).x + aKDialog(id).Wx AND Mouse.y > aKButton(object).y + aKDialog(id).Wy AND Mouse.x < aKButton(object).x + aKDialog(id).Wx + aKStrLength(aKButton(object).value) * 7.5 + 20 AND Mouse.y < aKButton(object).y + aKDialog(id).Wy + 23 THEN aKHover = -1
+        IF aKMouse.x > aKButton(object).x + aKDialog(id).Wx AND aKMouse.y > aKButton(object).y + aKDialog(id).Wy AND aKMouse.x < aKButton(object).x + aKDialog(id).Wx + aKStrLength(aKButton(object).value) * 7.5 + 20 AND aKMouse.y < aKButton(object).y + aKDialog(id).Wy + 23 THEN aKHover = -1
     CASE aKCheckBox
-        IF Mouse.x > aKCheckBox(object).x + aKDialog(id).Wx AND Mouse.y > aKCheckBox(object).y + aKDialog(id).Wy AND Mouse.x < aKCheckBox(object).x + aKDialog(id).Wx + aKStrLength(aKCheckBox(object).text) * 8 + 20 AND Mouse.y < aKCheckBox(object).y + aKDialog(id).Wy + 15 THEN aKHover = -1
+        IF aKMouse.x > aKCheckBox(object).x + aKDialog(id).Wx AND aKMouse.y > aKCheckBox(object).y + aKDialog(id).Wy AND aKMouse.x < aKCheckBox(object).x + aKDialog(id).Wx + aKStrLength(aKCheckBox(object).text) * 8 + 20 AND aKMouse.y < aKCheckBox(object).y + aKDialog(id).Wy + 15 THEN aKHover = -1
     CASE aKRadioButton
-        IF Mouse.x > aKRadioButton(object).x + aKDialog(id).Wx AND Mouse.y > aKRadioButton(object).y + aKDialog(id).Wy AND Mouse.x < aKRadioButton(object).x + aKDialog(id).Wx + aKStrLength(aKRadioButton(object).text) * 8 + 20 AND Mouse.y < aKRadioButton(object).y + aKDialog(id).Wy + 15 THEN aKHover = -1
+        IF aKMouse.x > aKRadioButton(object).x + aKDialog(id).Wx AND aKMouse.y > aKRadioButton(object).y + aKDialog(id).Wy AND aKMouse.x < aKRadioButton(object).x + aKDialog(id).Wx + aKStrLength(aKRadioButton(object).text) * 8 + 20 AND aKMouse.y < aKRadioButton(object).y + aKDialog(id).Wy + 15 THEN aKHover = -1
     CASE aKLinkLabel
-        IF Mouse.x > aKLinkLabel(object).x + aKDialog(id).Wx AND Mouse.y > aKLinkLabel(object).y + aKDialog(id).Wy AND Mouse.x < aKLinkLabel(object).x + aKDialog(id).Wx + aKStrLength(aKLinkLabel(object).text) * 8 AND Mouse.y < aKLinkLabel(object).y + aKDialog(id).Wy + 18 THEN aKHover = -1
+        IF aKMouse.x > aKLinkLabel(object).x + aKDialog(id).Wx AND aKMouse.y > aKLinkLabel(object).y + aKDialog(id).Wy AND aKMouse.x < aKLinkLabel(object).x + aKDialog(id).Wx + aKStrLength(aKLinkLabel(object).text) * 8 AND aKMouse.y < aKLinkLabel(object).y + aKDialog(id).Wy + 18 THEN aKHover = -1
     CASE aKComboBox
-        IF Mouse.x > aKComboBox(object).x + aKDialog(id).Wx AND Mouse.y > aKComboBox(object).y + aKDialog(id).Wy AND Mouse.x < aKComboBox(object).x + aKDialog(id).Wx + aKStrLength(aKComboBox(object).value) * 8 + 30 AND Mouse.y < aKComboBox(object).y + aKDialog(id).Wy + 23 THEN aKHover = -1
+        IF aKMouse.x > aKComboBox(object).x + aKDialog(id).Wx AND aKMouse.y > aKComboBox(object).y + aKDialog(id).Wy AND aKMouse.x < aKComboBox(object).x + aKDialog(id).Wx + aKStrLength(aKComboBox(object).value) * 8 + 30 AND aKMouse.y < aKComboBox(object).y + aKDialog(id).Wy + 23 THEN aKHover = -1
     CASE aKTextBox
-        IF Mouse.x > aKTextBox(object).x + aKDialog(id).Wx AND Mouse.y > aKTextBox(object).y + aKDialog(id).Wy AND Mouse.x < aKTextBox(object).x + aKDialog(id).Wx + aKTextBox(object).width AND Mouse.y < aKTextBox(object).y + aKDialog(id).Wy + 25 THEN aKHover = -1
+        IF aKMouse.x > aKTextBox(object).x + aKDialog(id).Wx AND aKMouse.y > aKTextBox(object).y + aKDialog(id).Wy AND aKMouse.x < aKTextBox(object).x + aKDialog(id).Wx + aKTextBox(object).width AND aKMouse.y < aKTextBox(object).y + aKDialog(id).Wy + 25 THEN aKHover = -1
     CASE aKNumericUpDown
-        IF Mouse.x > aKNumericUpDown(object).x + aKDialog(id).Wx AND Mouse.y > aKNumericUpDown(object).y + aKDialog(id).Wy AND Mouse.x < aKNumericUpDown(object).x + aKDialog(id).Wx + aKNumericUpDown(object).width + 30 AND Mouse.y < aKNumericUpDown(object).y + aKDialog(id).Wy + 25 THEN aKHover = -1
+        IF aKMouse.x > aKNumericUpDown(object).x + aKDialog(id).Wx AND aKMouse.y > aKNumericUpDown(object).y + aKDialog(id).Wy AND aKMouse.x < aKNumericUpDown(object).x + aKDialog(id).Wx + aKNumericUpDown(object).width + 30 AND aKMouse.y < aKNumericUpDown(object).y + aKDialog(id).Wy + 25 THEN aKHover = -1
     CASE aKPicture
-        IF Mouse.x > aKPicture(object).x + aKDialog(id).Wx AND Mouse.x < aKPicture(object).x + aKPicture(object).width + aKDialog(id).Wx AND Mouse.y > aKPicture(object).y + aKDialog(id).Wy AND Mouse.y < aKPicture(object).y + aKPicture(object).height + aKDialog(id).Wy THEN aKHover = -1
+        IF aKMouse.x > aKPicture(object).x + aKDialog(id).Wx AND aKMouse.x < aKPicture(object).x + aKPicture(object).width + aKDialog(id).Wx AND aKMouse.y > aKPicture(object).y + aKDialog(id).Wy AND aKMouse.y < aKPicture(object).y + aKPicture(object).height + aKDialog(id).Wy THEN aKHover = -1
     CASE ELSE
         aKError "aKHover", 254
 END SELECT
@@ -1292,7 +1292,7 @@ REDIM aKTooltip(1) AS aKTooltipType, aKTooltipLength AS INTEGER
 REDIM aKDivider(1) AS aKDividerType, aKDividerLength AS INTEGER
 REDIM aKPicture(1) AS aKPictureType, aKPictureLength AS INTEGER
 REDIM aKPanel(1) AS aKPanelType, aKPanelLength AS INTEGER
-REDIM Mouse AS mousetype, tooltipBg AS LONG, optionsBg AS LONG
+REDIM aKMouse AS mousetype, tooltipBg AS LONG, optionsBg AS LONG
 
 aKDialogLength = 1: aKlabelLength = 1: aKButtonLength = 1
 aKCheckBoxLength = 1: aKRadioLength = 1: aKLinklabelLength = 1
@@ -1342,23 +1342,23 @@ END SUB
 FUNCTION aKAnyClick (id, typ)
 SELECT CASE typ
     CASE aKLabel
-        IF aKAnyHover(id, typ) AND Mouse.Lclick THEN aKAnyClick = -1
+        IF aKAnyHover(id, typ) AND aKMouse.Lclick THEN aKAnyClick = -1
     CASE aKLinkLabel
-        IF aKAnyHover(id, typ) AND Mouse.Lclick THEN aKAnyClick = -1
+        IF aKAnyHover(id, typ) AND aKMouse.Lclick THEN aKAnyClick = -1
     CASE aKTextBox
-        IF aKAnyHover(id, typ) AND Mouse.Lclick THEN aKAnyClick = -1
+        IF aKAnyHover(id, typ) AND aKMouse.Lclick THEN aKAnyClick = -1
     CASE aKPicture
-        IF aKAnyHover(id, typ) AND Mouse.Lclick THEN aKAnyClick = -1
+        IF aKAnyHover(id, typ) AND aKMouse.Lclick THEN aKAnyClick = -1
     CASE aKComboBox
-        IF aKAnyHover(id, typ) AND Mouse.Lclick THEN aKAnyClick = -1
+        IF aKAnyHover(id, typ) AND aKMouse.Lclick THEN aKAnyClick = -1
     CASE aKRadioButton
-        IF aKAnyHover(id, typ) AND Mouse.Lclick THEN aKAnyClick = -1
+        IF aKAnyHover(id, typ) AND aKMouse.Lclick THEN aKAnyClick = -1
     CASE aKCheckBox
-        IF aKAnyHover(id, typ) AND Mouse.Lclick THEN aKAnyClick = -1
+        IF aKAnyHover(id, typ) AND aKMouse.Lclick THEN aKAnyClick = -1
     CASE aKNumericUpDown
-        IF aKAnyHover(id, typ) AND Mouse.Lclick THEN aKAnyClick = -1
+        IF aKAnyHover(id, typ) AND aKMouse.Lclick THEN aKAnyClick = -1
     CASE aKPicture
-        IF aKAnyHover(id, typ) AND Mouse.Lclick THEN aKAnyClick = -1
+        IF aKAnyHover(id, typ) AND aKMouse.Lclick THEN aKAnyClick = -1
     CASE ELSE
         aKError "aKAnyClick", 254
 END SELECT
